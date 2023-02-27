@@ -1,15 +1,27 @@
 import { Button } from "@chakra-ui/button";
 import { Input } from "@chakra-ui/input";
+import { ChakraProvider } from "@chakra-ui/react";
 import React, { useState } from "react";
+import Header from "./components/Header/Header";
+import theme from "./theme/theme";
+import ThemeContext from "./theme/ThemeContext";
 
 export default function App() {
   const [inputValue, setInputValue] = useState("");
+  const [colorMode, setColorMode] = useState("light");
 
+  const toggleColorMode = () => {
+    console.log(colorMode + " context");
+    setColorMode(colorMode === "light" ? "dark" : "light");
+  };
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
   };
 
   return (
+    <ThemeContext.Provider value={{ colorMode, toggleColorMode }}>
+    <ChakraProvider theme={theme[colorMode]}>
+      <Header/>
     <div className="flex flex-col items-center justify-center h-screen">
       <h1 className="text-4xl font-bold mb-8">Hello, world!</h1>
       <Input
@@ -26,5 +38,7 @@ export default function App() {
         Submit
       </Button>
     </div>
+    </ChakraProvider>
+    </ThemeContext.Provider>
   );
 }
